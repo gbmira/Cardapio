@@ -6,12 +6,18 @@ module.exports = {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
+    backgroundImage: {
+      'bgimage': 'url("./src/assets/banner.jpg")'
+    },
     extend: {
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-      },
+      colors: {
+        'cor-01': '#2E1065',
+        'cor-02': '#6D28D9',
+        'cor-03': '#8B5CF6',
+        'cor-04': '#A895FF',
+        'cor-05': '#DDD6FE',
+        'cor-06': '#ffffff'
+      }
     },
   },
   plugins: [],
