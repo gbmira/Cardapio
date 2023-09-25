@@ -3,19 +3,61 @@ import banners from "../assets/banner.jpg";
 import calendar from "../assets/calendar.svg";
 import HeaderSemana from "@/components/HeaderSemana";
 import Form from "@/components/form/Form";
+import Input from "@/components/form/input";
 import produto from "../assets/produto.jpg";
 import CardItem from "@/components/CardItem";
 import Button from "@/components/form/Button";
-import CadastroForm from "@/components/CadastroForm"; // Importa o componente CadastroForm
-import { useState, useEffect } from "react";
 
 export default function Home() {
-  const [lista, setLista] = useState([]);
+  let nome = '';
+  let quantidade = '';
+  let valorCalorico = '';
+  let quantidadeProteina = '';
+  let lista = [];
+  let selectedIndex = null;
 
-  // Função para adicionar um novo item à lista
-  const handleCadastrar = (novoItem) => {
-    // Atualiza a lista com o novo item
-    setLista([...lista, novoItem]);
+  const handleCadastrar = () => {
+    const novoItem = {
+      nome: nome,
+      quantidade: quantidade,
+      valorCalorico: valorCalorico,
+      quantidadeProteina: quantidadeProteina,
+    };
+    lista = [...lista, novoItem];
+    nome = '';
+    quantidade = '';
+    valorCalorico = '';
+    quantidadeProteina = '';
+  };
+
+  const handleAtualizar = () => {
+    if (selectedIndex !== null) {
+      const novoItem = {
+        nome: nome,
+        quantidade: quantidade,
+        valorCalorico: valorCalorico,
+        quantidadeProteina: quantidadeProteina,
+      };
+      lista[selectedIndex] = novoItem;
+      nome = '';
+      quantidade = '';
+      valorCalorico = '';
+      quantidadeProteina = '';
+      selectedIndex = null;
+    }
+  };
+
+  const handleExcluir = (index) => {
+    lista.splice(index, 1);
+  };
+
+  const handleEdit = (index) => {
+    const selectedItem = lista[index];
+    nome = selectedItem.nome;
+    quantidade = selectedItem.quantidade;
+    valorCalorico = selectedItem.valorCalorico;
+    quantidadeProteina = selectedItem.quantidadeProteina;
+    selectedIndex = index;
   };
 
   return (
@@ -38,19 +80,66 @@ export default function Home() {
         <HeaderSemana />
 
         <div className="container-form">
-          {/* Renderiza o componente CadastroForm e passa a função de cadastro como prop */}
-          <CadastroForm onCadastrar={handleCadastrar} />
+          <Form>
+            <h1>Cadastre o cardápio</h1>
+
+            <Input
+              id="comida"
+              type="text"
+              label="Nome da comida"
+              placeholder="ex. frango"
+              value={nome}
+              onChange={(e) => (nome = e.target.value)}
+            />
+
+            <Input
+              id="qtd"
+              type="number"
+              label="Quantidade"
+              placeholder="10 km"
+              value={quantidade}
+              onChange={(e) => (quantidade = e.target.value)}
+            />
+
+            <Input
+              id="valor-calorico"
+              type="text"
+              label="Valor Calórico"
+              placeholder="200kcal"
+              value={valorCalorico}
+              onChange={(e) => (valorCalorico = e.target.value)}
+            />
+
+            <Input
+              id="quantidade-proteina"
+              type="text"
+              label="Quantidade de proteína"
+              value={quantidadeProteina}
+              onChange={(e) => (quantidadeProteina = e.target.value)}
+            />
+
+            <Button texto="Cadastrar" onClick={handleCadastrar} />
+            <Button texto="Atualizar" onClick={handleAtualizar} />
+          </Form>
 
           <div className="card-grid">
-            {/* Renderiza a lista de itens cadastrados */}
             {lista.map((item, index) => (
               <CardItem
                 key={index}
                 img={produto}
                 nomeComida={item.nome}
-                // Outros campos de item aqui
+                preco="R$ 19,50"
                 texto="Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis ab totam!"
-              />
+              >
+                <Button
+                  texto="Editar"
+                  onClick={() => handleEdit(index)}
+                />
+                <Button
+                  texto="Excluir"
+                  onClick={() => handleExcluir(index)}
+                />
+              </CardItem>
             ))}
           </div>
         </div>
